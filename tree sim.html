@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@1,600&display=swap"
+      rel="stylesheet"
+    />
+    <title>Queue Data Structure Implementation</title>
+    <style>
+        body {
+        background-image: url('./bgimg.png');
+        color: black;   
+        font-family: "Poppins", sans-serif;
+        justify-content: center; /* Aligning content horizontally */
+        align-items: center; /* Aligning content vertically */
+        }
+        nav {
+        box-shadow: 0 20px 0px 0 #dc3545;
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        height: 100px;
+        width: 100%;
+        background-color: #93332e;
+        margin-bottom: 100px;
+      }
+      .left {
+        font-size: 40px;
+      }
+      nav ul {
+        display: flex;
+        justify-content: center;
+      }
+      nav ul li {
+        list-style: none;
+        margin: 0 25px;
+      }
+      nav ul li a {
+        text-decoration: none;
+        color: white;
+      }
+      nav ul li a:hover {
+        color: #cdc2ae;
+        
+      }
+      ul li ul.dropdown li{
+        padding-top: 10px;
+        padding-bottom: 10px;
+        font-size: 25px;
+        display: block;
+      }
+      ul li ul.dropdown{
+        width: 250px;
+        background: #bb433c;
+        position: absolute;
+        min-width: 160px;
+        box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+        padding-left: 10px;
+        padding-top: 10px;
+        padding-right: 20px;
+        padding-bottom: 10px;
+        z-index: 1;
+        display: none;
+      }
+      .dropdown a:hover{
+        color: #93332e;
+        background-color: cornsilk;
+        display: block;
+        width: 100%;
+        padding:10px;
+      }
+      ul li a:hover{
+        font-size: 25px;
+      }
+      ul li:hover ul.dropdown{
+        display: block;
+      }
+      .dropdown hr{
+        color: cornsilk;
+      }
+      .img img{
+        width: 200px;
+        height: 70px;
+        padding: 10px;
+        background-color: #f5f6f6;
+      }
+        
+        /* Styles for tree visualization */
+        .tree {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+            position: relative;
+            width: 100%; /* Expand horizontally */
+        }
+
+        .node {
+            border: 2px solid #93332e;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #fff;
+            margin: 0 5px; /* Reduced horizontal spacing */
+            position: absolute;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        .node-value {
+            font-size: 20px;
+        }
+
+        .edge {
+            stroke: #93332e;
+            stroke-width: 2px;
+            fill: transparent;
+        }
+
+        /* CSS animation */
+        @keyframes fadeIn {
+            0% { opacity: 0; transform: scale(0); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+
+        /* Styles for user interface */
+        .container {
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        h1 {
+            color: #93332e;
+            margin-bottom: 20px;
+        }
+
+        .button-container {
+            margin-top: 5px;
+        }
+
+        input[type="number"] {
+            padding: 10px;
+            border: 2px solid #93332e;
+            border-radius: 5px;
+            width: 150px;
+        }
+
+        button {
+            padding: 12px 10px;
+            background-color: #93332e;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background-color: #dc3545;
+        }
+
+        .action-text {
+            margin-top: 20px;
+            font-size: 18px;
+            color: #93332e;
+            max-height: 200px; /* Limiting max height */
+            overflow-y: auto; /* Adding scrollbar */
+            padding: 10px;
+            border: 2px solid #93332e;
+            border-radius: 5px;
+            text-align: left; /* Align text to left */
+            white-space: pre-line; /* Preserve line breaks */
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+          <div class="img"><img src="pngfind.com-ganpati-vector-png-213802.png"></div>
+          <div class="left" style="color: white;">Study Lab</div>
+          <div class="right">
+            <ul>
+              <li><a href="index.html">Home</a></li>
+              <li><a href="./book.html">Books</a></li>
+              <li><a href="#">Labs</a>
+              <ul class="dropdown">
+                <li><a href="lab.html">Stacks</a></li><hr>
+                <li><a href="queuetheory.html">Queue</a></li><hr>
+                <li><a href="circular queue theory.html">Circular Queue</a></li><hr>
+                <li><a href="./trees.html">Trees</a></li><hr>
+                <li><a href="./quizes.html">Quizes</a></li><hr>
+                <li><a href="#">Feedback</a></li>
+            </ul>
+            <li><a href="#cu">Contact Us</a></li>
+          </div>
+        </nav>
+      </header>
+    <div class="box">
+    <div class="container">
+        <h1>AVL Tree Simulation</h1>
+        <svg id="tree" class="tree" width="800" height="500">
+            <!-- Tree nodes will be dynamically added here -->
+        </svg>
+        <div class="button-container">
+            <input type="number" id="element-input" placeholder="Element to insert">
+            <button onclick="insert()">Insert</button>
+        </div>
+        <div class="action-text" id="operation-box"></div> <!-- Operation box -->
+    </div>
+    </div>
+    <script>
+        class TreeNode {
+            constructor(value) {
+                this.value = value;
+                this.height = 1;
+                this.left = null;
+                this.right = null;
+            }
+        }
+
+        class AVLTree {
+            constructor() {
+                this.root = null;
+            }
+
+            getHeight(node) {
+                return node ? node.height : 0;
+            }
+
+            getBalanceFactor(node) {
+                return node ? this.getHeight(node.left) - this.getHeight(node.right) : 0;
+            }
+
+            rotateRight(y) {
+                const x = y.left;
+                const T2 = x.right;
+
+                x.right = y;
+                y.left = T2;
+
+                y.height = Math.max(this.getHeight(y.left), this.getHeight(y.right)) + 1;
+                x.height = Math.max(this.getHeight(x.left), this.getHeight(x.right)) + 1;
+
+                return x;
+            }
+
+            rotateLeft(x) {
+                const y = x.right;
+                const T2 = y.left;
+
+                y.left = x;
+                x.right = T2;
+
+                x.height = Math.max(this.getHeight(x.left), this.getHeight(x.right)) + 1;
+                y.height = Math.max(this.getHeight(y.left), this.getHeight(y.right)) + 1;
+
+                return y;
+            }
+
+            insertNode(node, value, operationBox) {
+                if (!node) {
+                    operationBox.textContent += `Inserted ${value}\n`;
+                    return new TreeNode(value);
+                }
+
+                if (value < node.value) {
+                                        operationBox.textContent += `Going left from ${node.value}\n`;
+                    node.left = this.insertNode(node.left, value, operationBox);
+                } else if (value > node.value) {
+                    operationBox.textContent += `Going right from ${node.value}\n`;
+                    node.right = this.insertNode(node.right, value, operationBox);
+                } else {
+                    operationBox.textContent += `Error: ${value} is already in the tree\n`;
+                    return node; // No duplicates allowed
+                }
+
+                node.height = 1 + Math.max(this.getHeight(node.left), this.getHeight(node.right));
+
+                const balanceFactor = this.getBalanceFactor(node);
+
+                if (balanceFactor > 1 && value < node.left.value) {
+                    return this.rotateRight(node);
+                }
+
+                if (balanceFactor < -1 && value > node.right.value) {
+                    return this.rotateLeft(node);
+                }
+
+                if (balanceFactor > 1 && value > node.left.value) {
+                    node.left = this.rotateLeft(node.left);
+                    return this.rotateRight(node);
+                }
+
+                if (balanceFactor < -1 && value < node.right.value) {
+                    node.right = this.rotateRight(node.right);
+                    return this.rotateLeft(node);
+                }
+
+                return node;
+            }
+
+            insert(value, operationBox) {
+                this.root = this.insertNode(this.root, value, operationBox);
+            }
+        }
+
+        const avlTree = new AVLTree();
+        const treeElement = document.getElementById('tree');
+        const operationBox = document.getElementById('operation-box');
+
+        function updateTreeDisplay(node, x = 400, y = 50, depth = 1) {
+            if (!node) return;
+
+            const circle = document.createElementNS("http://www.w3.org/2000/svg", 'circle');
+            circle.setAttribute('cx', x);
+            circle.setAttribute('cy', y);
+            circle.setAttribute('r', 20);
+            circle.setAttribute('fill', '#fff');
+            circle.setAttribute('stroke', '#93332e');
+            circle.setAttribute('stroke-width', '2');
+            circle.setAttribute('class', 'node');
+            treeElement.appendChild(circle);
+
+            const text = document.createElementNS("http://www.w3.org/2000/svg", 'text');
+            text.setAttribute('x', x);
+            text.setAttribute('y',y + 5);
+            text.setAttribute('text-anchor', 'middle');
+            text.setAttribute('fill', '#93332e');
+            text.setAttribute('class', 'node-value');
+            text.textContent = node.value;
+            treeElement.appendChild(text);
+
+            if (node.left) {
+                const leftX = x - 50 * (0.5 ** (depth - 3));
+                const leftY = y + 80;
+                const line = document.createElementNS("http://www.w3.org/2000/svg", 'line');
+                line.setAttribute('x1', x);
+                line.setAttribute('y1', y + 20);
+                line.setAttribute('x2', leftX);
+                line.setAttribute('y2', leftY - 20);
+                line.setAttribute('stroke-width', '2');
+                line.setAttribute('stroke', '#93332e');
+                line.setAttribute('stroke-width', '2');
+                line.setAttribute('class', 'edge');
+                treeElement.appendChild(line);
+                updateTreeDisplay(node.left, leftX, leftY, depth + 1);
+            }
+
+            if (node.right) {
+                const rightX = x + 50 * (0.5 ** (depth - 3));
+                const rightY = y + 80;
+                const line = document.createElementNS("http://www.w3.org/2000/svg", 'line');
+                line.setAttribute('x1', x);
+                line.setAttribute('y1', y + 20);
+                line.setAttribute('x2', rightX);
+                line.setAttribute('y2', rightY - 20);
+                line.setAttribute('stroke', '#93332e');
+                line.setAttribute('stroke-width', '2');
+                line.setAttribute('class', 'edge');
+                treeElement.appendChild(line);
+                updateTreeDisplay(node.right, rightX, rightY, depth + 1);
+            }
+        }
+
+        function insert() {
+            const elementInput = parseInt(document.getElementById('element-input').value);
+            if (isNaN(elementInput)) {
+                operationBox.textContent += `Invalid input: Please enter a valid number.\n`;
+                return;
+            }
+            avlTree.insert(elementInput, operationBox);
+            treeElement.innerHTML = ''; // Clear previous nodes and edges
+            updateTreeDisplay(avlTree.root);
+            document.getElementById('element-input').value = '';
+        }
+    </script>
+</body>
+</html>

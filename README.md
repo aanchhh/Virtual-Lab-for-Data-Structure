@@ -1,1 +1,1 @@
-# Virtual-Lab-for-Data-Structure
+# studylab
